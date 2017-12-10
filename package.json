@@ -1,27 +1,21 @@
 {
   "name": "koa-joi-swagger",
   "version": "1.1.0",
-  "description": "An ES6 decorator + class based router, support inherit, override, priority, auto load controllers, etc.",
+  "description":
+    "An ES6 decorator + class based router, support inherit, override, priority, auto load controllers, etc.",
   "main": "lib/index.js",
   "scripts": {
-    "build": "cross-env NODE_ENV=production babel -d ./lib -s false -D ./src && git add -A",
+    "build":
+      "cross-env NODE_ENV=production babel -d ./lib -s false -D ./src && git add -A",
     "test": "cross-env NODE_ENV=development DEBUG=koa-joi-swagger ava --serial",
     "cover": "cross-env NODE_ENV=development nyc ava --serial"
   },
-  "precommit": [
-    "build"
-  ],
+  "precommit": ["build"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zaaack/koa-joi-swagger.git"
   },
-  "keywords": [
-    "koa",
-    "joi",
-    "swagger",
-    "validation",
-    "api-docs"
-  ],
+  "keywords": ["koa", "joi", "swagger", "validation", "api-docs"],
   "author": "zaaack",
   "license": "MIT",
   "bugs": {
@@ -56,10 +50,7 @@
     "supertest": "^3.0.0"
   },
   "ava": {
-    "files": [
-      "test/**/test.*.js",
-      "test/**/test.js"
-    ],
+    "files": ["test/**/test.*.js", "test/**/test.js"],
     "require": "babel-register",
     "babel": "inherit"
   },

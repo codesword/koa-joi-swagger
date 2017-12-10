@@ -5,7 +5,7 @@ import { debug } from './utils'
 
 const errorNameMap = {
   request: 'RequestValidationError',
-  response: 'ResponseValidationError'
+  response: 'ResponseValidationError',
 }
 
 async function validateFields(obj, schema, opts) {
@@ -68,9 +68,9 @@ export function joiValidate(schema) {
       const resObj = sm.res[ctx.status + ''] || sm.res.default
       const resSchema = resObj.schema || resObj
       return { body: resSchema }
-    }
+    },
   } = schema
-  return async function (ctx, next) {
+  return async function(ctx, next) {
     await validateFields(ctx.request, getReqSchema(schema, ctx), {
       joiOpts: schema.reqOpts,
       errorType: 'request',
@@ -114,22 +114,26 @@ export default function mixedValidate(document, opts = {}) {
   })
   function matchPath(si, ctx) {
     const path = ctx.path.replace(new RegExp(`^${document.basePath}`), '')
-    const match = path.match(si.pathRe) && (ctx.method.toLowerCase() in si.schema)
-    return match && si.keys.reduce((params, key, i) => {
-      params[key] = match[i + 1]
-      return params
-    }, {})
+    const match = path.match(si.pathRe) && ctx.method.toLowerCase() in si.schema
+    return (
+      match &&
+      si.keys.reduce((params, key, i) => {
+        params[key] = match[i + 1]
+        return params
+      }, {})
+    )
   }
   const cache = {}
   return async (ctx, next) => {
     let pathParams
     let schemaInfo = schemaInfos.find(
-      si => (pathParams = pathParams || matchPath(si, ctx)))
+      si => (pathParams = pathParams || matchPath(si, ctx))
+    )
     if (!schemaInfo) return next()
-    const key = schemaInfo.path
+    const method = ctx.method.toLowerCase()
+    const key = method + '->' + schemaInfo.path
     let validate = cache[key]
     if (!validate) {
-      const method = ctx.method.toLowerCase()
       debug('schemaInfo', method, schemaInfo.schema)
       const schema = schemaInfo.schema[method]
       const joiValidateSchema = {
